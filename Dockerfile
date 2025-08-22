@@ -1,16 +1,19 @@
-# Use a lightweight web server (Nginx) to serve the static files
-FROM nginx:alpine
+# Use Node.js lightweight image
+FROM node:20-alpine
 
-# Remove the default nginx index page
-RUN rm -rf /usr/share/nginx/html/*
+# Set working directory
+WORKDIR /app
 
-# Copy your built React app (dist folder) into the Nginx web directory
-COPY dist/ /usr/share/nginx/html
+# Install static file server
+RUN npm install -g serve@14
 
+# Copy prebuilt React dist folder
+COPY dist ./dist
 
-# Expose port 80
-EXPOSE 80
+# Expose port 3000
+EXPOSE 3000
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Command to run the app
+CMD ["serve", "-s", "dist", "-l", "3000"]
+
 
